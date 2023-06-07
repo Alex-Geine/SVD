@@ -10,7 +10,7 @@ Matrix::Matrix(int rows, int col) {
 	for (int i = 0; i < rows; i++) {
 		M[i] = new double[col];
 		for (int j = 0; j < col; j++) {
-			M[i][j] = 1 + (double)rand() / RAND_MAX;			
+			M[i][j] = -1 + 2 * (double)rand() / RAND_MAX;			
 		}
 	}
 }
@@ -374,10 +374,16 @@ void Matrix::delRubb() {
 
 //reverse Sigma
 void Matrix::reverse() {
+	double lim = this->M[0][0] * 0.01;
 	for (int i = 0; i < rows; i++) {		
 		for (int j = 0; j < rows; j++)
-			if(i == j)
-				this->M[i][j] = 1 / this->M[i][j];
+			if (i == j) {
+				if (this->M[i][j] > lim)
+					this->M[i][j] = 1 / this->M[i][j];
+				else
+					this->M[i][j] = 0;
+			}
+				
 	}
 }
 
@@ -386,7 +392,7 @@ double Matrix::lError(Matrix Xres) {
 	double res = 0;
 	for (int i = 0; i < this->rows; i++)
 		res += abs(this->M[i][0] - Xres.M[i][0]);
-	return res;
+	return res;	
 }
 //right error
 double Matrix::rError(Matrix A, Matrix B) {
